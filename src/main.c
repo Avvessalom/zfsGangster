@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     } else if (!strcmp(argv[1], "--second")){
         printf("test2 %s", "second");
     } else {
-        puts("incorrect argument\n");
+        puts("invalid argument\n");
         return 1;
     }
     return 0;
