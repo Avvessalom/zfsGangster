@@ -1,5 +1,8 @@
+CC = gcc
+LIBS = -lblkid
+
 all:
-	gcc src/main.c -o main.o
+	$(CC)  -o main.o  src/main.c $(LIBS) -std=c11
 
 clear:
 	rm -rf *.o
