@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         DeviceList(&info);
         IteratorDevice(&info);
     } else if (!strcmp(argv[1], "--second")){
-        printf("test2 %s", "second");
+        printf("test2 %s\n", "second");
     } else {
         puts("invalid argument\n");
         return 1;
