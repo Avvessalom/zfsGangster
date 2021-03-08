@@ -4,31 +4,42 @@
 #ifndef ITMO_SYSTEM_LEVEL_SOFTWARE_ZFS_H
 #define ITMO_SYSTEM_LEVEL_SOFTWARE_ZFS_H
 #include <stdbool.h>
+#include <inttypes.h>
 
-bool isZfs{};
+bool isZfs(){};
+
+typedef struct dva {
+    uint64_t dva_word[2];
+} dva_t;
+
+typedef struct zio_cksum {
+    uint64_t zc_word[4];
+} zio_cksum_t;
+
+typedef struct blkptr {
+    dva_t blk_dva[3];/* 128-bit Data Virtual Address */
+    uint64_t blk_prop;/* размер, сжатие, тип, и т.д. */
+    uint64_t blk_pad[3];/* зарезервировано */
+    uint64_t blk_birth;/* номер группы транзакций */
+    uint64_t blk_fill;/* fill count */
+    zio_cksum_t blk_cksum;/* 256-битная контрольная сумма */
+} blkptr_t;
+
+
 
 typedef struct filesystem {
     FILE *file;
     uint32_t blockSize;
 } filesystem;
 
-typedef struct znode_phys {
-    uint64_t zp_atime[2];/* время последнего доступа */
-    uint64_t zp_mtime[2];/* время последней изменения модификации * файла */
-    uint64_t zp_ctime[2];/* время последнего изменения */
-    uint64_t zp_crtime[2];/* время создания */
-    uint64_t zp_gen;/* номер группы транзакций на момент * создания */
-    uint64_t zp_mode;/* mode-биты */
-    uint64_t zp_size;/* размер файла */
-    uint64_t zp_parent;/* родительский каталог ("..") */
-    uint64_t zp_links;
-    uint64_t zp_xattr;/* DMU-объект для xattrs */
-    uint64_t zp_rdev;/* dev_t для VBLK и VCHR файлов */
-    uint64_t zp_flags;/* флаги */
-    uint64_t zp_uid;/* владелец */
-    uint64_t zp_gid;/* группа */
-    uint64_t zp_pad[4];/* зарезервировано */
-    zfs_znode_acl_t zp_acl;/* ACL */
-} znode_phys_t;
+struct uberblock {
+    uint64_t	ub_magic;	/* UBERBLOCK_MAGIC		*/
+    uint64_t	ub_version;	/* SPA_VERSION			*/
+    uint64_t	ub_txg;		/* txg of last sync		*/
+    uint64_t	ub_guid_sum;	/* sum of all vdev guids	*/
+    uint64_t	ub_timestamp;	/* UTC time of last sync	*/
+    blkptr_t	ub_rootbp;	  /* MOS objset_phys_t		*/
+    uint64_t	ub_software_version;
+};
 
 #endif //ITMO_SYSTEM_LEVEL_SOFTWARE_ZFS_H
