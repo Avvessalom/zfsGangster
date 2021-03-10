@@ -56,3 +56,16 @@ void convertDnodePhys(struct dnode_phys* dnode){
     }
     convertBlkptr(&dnode->dn_blkptr);
 }
+
+void convertZioEck(struct zio_eck* eck){
+    eck->zec_magic = bswap_64(eck->zec_magic);
+    convertZioChksum(&eck->zec_cksum);
+}
+
+void convertVdevPhys(struct vdev_phys* phys){
+    convertZioEck(&phys->vp_zbt);
+}
+
+void convertVdevLabel(struct vdev_label label){
+    convertVdevPhys(&label.vl_vdev_phys);
+}

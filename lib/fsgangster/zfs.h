@@ -10,6 +10,9 @@
 #define SPA_MINBLOCKSHIFT   9
 #define SPA_MINBLOCKSIZE   (1ULL << SPA_MINBLOCKSHIFT)
 #define	SPA_GANGBLOCKSIZE	SPA_MINBLOCKSIZE
+#define VDEV_SKIP_SIZE        (8 << 10)
+#define VDEV_UBERBLOCK_RING   (128 << 10)
+#define VDEV_PHYS_SIZE   (112 << 10)
 
 #define	SPA_GBH_NBLKPTRS	((SPA_GANGBLOCKSIZE - \
 	sizeof (zio_block_tail_t)) / sizeof (blkptr_t))
@@ -18,6 +21,12 @@
 	(SPA_GBH_NBLKPTRS * sizeof (blkptr_t))) /\
 	sizeof (uint64_t))
 
+typedef struct vdev_label {
+    char                vl_pad[VDEV_SKIP_SIZE];             /*  8K  */
+    vdev_boot_header_t  vl_boot_header;                     /*  8K под вопросиком в фрибсд нету такого */
+    vdev_phys_t         vl_vdev_phys;                       /* 112K */
+    char                vl_uberblock[VDEV_UBERBLOCK_RING];  /* 128K */
+} vdev_label_t;
 
 typedef struct dva {
     uint64_t dva_word[2];
@@ -26,6 +35,11 @@ typedef struct dva {
 typedef struct zio_cksum {
     uint64_t zc_word[4];
 } zio_cksum_t;
+
+typedef struct zio_eck {
+    uint64_t        zec_magic;
+    zio_cksum_t     zec_cksum;
+} zio_eck_t;
 
 typedef struct blkptr {
     dva_t    blk_dva[3];            /* 128-bit Data Virtual Address */
@@ -52,14 +66,18 @@ typedef struct zio_block_tail {
     zio_cksum_t	zbt_cksum;	        /* 256-bit checksum		*/
 } zio_block_tail_t;
 
+typedef struct vdev_phys {
+    char vp_nvlist[VDEV_PHYS_SIZE - sizeof (zio_block_tail_t)];
+    zio_block_tail_t vp_zbt;
+} vdev_phys_t;
+
 typedef struct zio_gbh {
     blkptr_t            zg_blkptr[SPA_GBH_NBLKPTRS];
     uint64_t            zg_filler[SPA_GBH_FILLER];
     zio_block_tail_t	zg_tail;
 } zio_gbh_phys_t;
 
-
-typedef struct dnode_phys { //from https://raw.githubusercontent.com/AustinWise/ZfsSharp/master/ZFSOnDiskFormat.pdf P23
+typedef struct dnode_phys {     /* from https://raw.githubusercontent.com/AustinWise/ZfsSharp/master/ZFSOnDiskFormat.pdf Page 23 */
     uint8_t dn_type;		    /* dmu_object_type_t */
     uint8_t dn_indblkshift;		/* ln2(indirect block size) */
     uint8_t dn_nlevels;		    /* 1=dn_blkptr->data blocks */
