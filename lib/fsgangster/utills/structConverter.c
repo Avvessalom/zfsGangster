@@ -22,9 +22,10 @@ void convertBlkptr(struct blkptr* blk){
     blk->blk_birth = bswap_64(blk->blk_birth);
     blk->blk_fill = bswap_64(blk->blk_birth);
     convertZio(&blk->blk_cksum);
-    //TODO blk_pad
+    for (int k = 0; k < 3; k++) {
+        blk->blk_pad[k] = bswap_64(blk->blk_pad[k]);
+    }
 }
-
 
 void convertUberblock(struct uberblock* block){
     block->ub_magic = bswap_64(block->ub_magic);

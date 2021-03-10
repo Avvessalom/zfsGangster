@@ -7,6 +7,17 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
+#define SPA_MINBLOCKSHIFT   9
+#define SPA_MINBLOCKSIZE   (1ULL << SPA_MINBLOCKSHIFT)
+#define	SPA_GANGBLOCKSIZE	SPA_MINBLOCKSIZE
+
+#define	SPA_GBH_NBLKPTRS	((SPA_GANGBLOCKSIZE - \
+	sizeof (zio_block_tail_t)) / sizeof (blkptr_t))
+#define	SPA_GBH_FILLER		((SPA_GANGBLOCKSIZE - \
+	sizeof (zio_block_tail_t) - \
+	(SPA_GBH_NBLKPTRS * sizeof (blkptr_t))) /\
+	sizeof (uint64_t))
+
 
 typedef struct dva {
     uint64_t dva_word[2];
@@ -19,7 +30,7 @@ typedef struct zio_cksum {
 
 
 typedef struct blkptr {
-    dva_t blk_dva[3];               /* 128-bit Data Virtual Address */
+    dva_t    blk_dva[3];            /* 128-bit Data Virtual Address */
     uint64_t blk_prop;              /* размер, сжатие, тип, и т.д.  */
     uint64_t blk_pad[3];            /* зарезервировано              */
     uint64_t blk_birth;             /* номер группы транзакций      */
@@ -38,5 +49,15 @@ struct __attribute__((packed)) uberblock {
     uint64_t ub_software_version;
 };
 
+typedef struct zio_block_tail {
+    uint64_t	zbt_magic;	        /* for validation, endianness	*/
+    zio_cksum_t	zbt_cksum;	        /* 256-bit checksum		*/
+} zio_block_tail_t;
+
+typedef struct zio_gbh {
+    blkptr_t            zg_blkptr[SPA_GBH_NBLKPTRS];
+    uint64_t            zg_filler[SPA_GBH_FILLER];
+    zio_block_tail_t	zg_tail;
+} zio_gbh_phys_t;
 
 #endif //ITMO_SYSTEM_LEVEL_SOFTWARE_ZFS_H
