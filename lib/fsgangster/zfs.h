@@ -39,10 +39,4 @@ struct __attribute__((packed)) uberblock {
 };
 
 
-typedef struct filesystem {
-    FILE *file;
-    uint32_t blockSize;
-} filesystem;
-
-
 #endif //ITMO_SYSTEM_LEVEL_SOFTWARE_ZFS_H

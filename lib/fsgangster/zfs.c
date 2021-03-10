@@ -2,11 +2,9 @@
 // Created by kain on 21.02.2021.
 //
 #include <stdio.h>
-#include <byteswap.h>
 
 #include "zfs.h"
-
-#define BLOCK_SIZE 512
+#include "utills/structConverter.c"
 
 int openZfs(const char* path){
     FILE* file = fopen(path, "rb");
@@ -17,19 +15,18 @@ int openZfs(const char* path){
         return -1;
     }
 
-    fseek(file, 0x28000, SEEK_SET);
+    fseek(file, 0x25000, SEEK_SET);
 
     fread(&block, sizeof(block), 1, file);
-    n = bswap_64(block.ub_magic);
+    convertUberblock(&block);
     printf("%lu\n", block.ub_magic);
-    printf("%ld", n);
     fclose(file);
     return 0;
 }
 
 int main (){
 
-    openZfs("/home/kain/github/ITMO-System-level-Software/scripts/fs.img");
+    openZfs("/home/kain/github/zfsGangster/scripts/fs.img");
 
     return 0;
 }
