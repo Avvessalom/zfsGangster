@@ -23,11 +23,9 @@ typedef struct dva {
     uint64_t dva_word[2];
 } dva_t;
 
-
 typedef struct zio_cksum {
     uint64_t zc_word[4];
 } zio_cksum_t;
-
 
 typedef struct blkptr {
     dva_t    blk_dva[3];            /* 128-bit Data Virtual Address */
@@ -59,5 +57,25 @@ typedef struct zio_gbh {
     uint64_t            zg_filler[SPA_GBH_FILLER];
     zio_block_tail_t	zg_tail;
 } zio_gbh_phys_t;
+
+
+typedef struct dnode_phys { //from https://raw.githubusercontent.com/AustinWise/ZfsSharp/master/ZFSOnDiskFormat.pdf P23
+    uint8_t dn_type;		    /* dmu_object_type_t */
+    uint8_t dn_indblkshift;		/* ln2(indirect block size) */
+    uint8_t dn_nlevels;		    /* 1=dn_blkptr->data blocks */
+    uint8_t dn_nblkptr;		    /* length of dn_blkptr */
+    uint8_t dn_bonustype;		/* type of data in bonus buffer */
+    uint8_t	dn_checksum;		/* ZIO_CHECKSUM type */
+    uint8_t	dn_compress;		/* ZIO_COMPRESS type */
+    uint8_t dn_pad[1];		    /* DNODE_FLAG_* */
+    uint16_t dn_datablkszsec;	/* data block size in 512b sectors */
+    uint16_t dn_bonuslen;		/* length of dn_bonus */
+    uint8_t dn_pad2[4];         /* accounting is protected by dn_dirty_mtx */
+    uint64_t dn_maxblkid;		/* largest allocated block ID */
+    uint64_t dn_secphys;        /* The sum of all asize values for all block pointers (data and indirect) for this object. */
+    uint64_t dn_pad3[4];
+    blkptr_t dn_blkptr;          /* block pointer array containing dn_nblkptr block pointers Page 25 */
+    uint8_t dn_bonus[BONUSLEN];
+} dnode_phys_t;
 
 #endif //ITMO_SYSTEM_LEVEL_SOFTWARE_ZFS_H

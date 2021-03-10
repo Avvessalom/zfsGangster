@@ -6,7 +6,7 @@
 #include "../zfs.h"
 
 
-void convertZio(struct zio_cksum* cksum){
+void convertZioChksum(struct zio_cksum* cksum){
     for (int i = 0; i < 4; i++){
         cksum->zc_word[i] = bswap_64(cksum->zc_word[i]);
     }
@@ -35,4 +35,24 @@ void convertUberblock(struct uberblock* block){
     block->ub_timestamp = bswap_64(block->ub_timestamp);
     block->ub_software_version = bswap_64(block->ub_software_version);
     convertBlkptr(&block->ub_rootbp);
+}
+
+void convertBlockTail(struct zio_block_tail* tail){
+    tail->zbt_magic = bswap_64(tail->zbt_magic);
+    convertZio(&tail->zbt_cksum);
+}
+
+void convertZioGbn(struct zio_gbh* gbh){
+    convertBlkptr(&gbh->zg_blkptr);
+    gbh->zg_filler = bswap_64(gbh->zg_filler);
+    convertBlockTail(&gbh->zg_tail);
+}
+
+void convertDnodePhys(struct dnode_phys* dnode){
+    dnode->dn_maxblkid = bswap_64(dnode->dn_maxblkid);
+    dnode->dn_secphys = bswap_64(dnode->dn_secphys);
+    for (int i = 0; i < 3; i++){
+        dnode->dn_pad3[i] = bswap_64(dnode->dn_pad3);
+    }
+    convertBlkptr(&dnode->dn_blkptr);
 }
