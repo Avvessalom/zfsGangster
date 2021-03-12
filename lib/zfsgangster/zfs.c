@@ -3,23 +3,20 @@
 //
 #include <stdio.h>
 
-#include "zfs.h"
-#include "utills/structConverter.c"
+#include "include/vdev.h"
 
 int openZfs(const char* path){
+    struct vdev_label vdevLabel;
     FILE* file = fopen(path, "rb");
     long int n;
-    struct uberblock block;
     if (!file){
         perror("Cannot open\n");
         return -1;
     }
 
-    fseek(file, 0x25000, SEEK_SET);
+    fseek(file, 0, SEEK_SET);
 
-    fread(&block, sizeof(block), 1, file);
-    convertUberblock(&block);
-    printf("%lu\n", block.ub_magic);
+    fread(&vdevLabel, sizeof(vdevLabel), 1, file);
     fclose(file);
     return 0;
 }

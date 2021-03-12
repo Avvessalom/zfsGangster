@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../lib/fsgangster/Dev.c"
+#include "../lib/zfsgangster/Dev.c"
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
