@@ -32,7 +32,7 @@ typedef struct zio_eck {
 
 typedef struct vdev_boot_envblock {
     uint64_t	vbe_version;
-    char		vbe_bootenv[VDEV_SKIP_SIZE - sizeof (uint64_t)
+    char		vbe_bootenv[VDEV_SKIP_SIZE - sizeof (uint64_t) -
                             sizeof (zio_eck_t)];
     zio_eck_t	vbe_zbt;
 } vdev_boot_envblock_t;
