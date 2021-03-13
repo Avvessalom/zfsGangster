@@ -41,3 +41,14 @@ sudo sh zfs_unmount.sh
 make
 ```
 
+для запуска программы в первом режиме выполнить команду
+
+```bash
+./main --first
+```
+
+или 
+
+```bash
+make start1
+```
