@@ -32,3 +32,12 @@ sudo sh zfs_mount.sh
 ```bash
 sudo sh zfs_unmount.sh
 ```
+
+# Инструкции по сборке
+
+в корневой папке проекта выполнить команду 
+
+```bash
+make
+```
+
