@@ -13,6 +13,8 @@
 #define VDEV_UBERBLOCK_RING   (128 << 10)
 #define VDEV_PHYS_SIZE        (112 << 10)
 
+#define VDEV_LABELS             4
+
 
 typedef struct vdev_boot_envblock {
     uint64_t vbe_version;
