@@ -12,9 +12,17 @@ include_directories(/lib/zfsgangster/include)
 add_executable(zfsGangster
         lib/zfsgangster/zfs.c
         lib/zfsgangster/lib/libspl/include/assert.h
+        lib/zfsgangster/lib/libspl/include/umem.h
+        lib/zfsgangster/lib/libspl/include/atomic.h
         lib/zfsgangster/lib/libspl/assert.c
         lib/zfsgangster/include/os/freebsd/spl/sys/condvar.h
+        lib/zfsgangster/include/os/freebsd/spl/sys/debug.h
         lib/zfsgangster/include/os/freebsd/spl/sys/list.h
+        lib/zfsgangster/include/os/freebsd/spl/sys/list_impl.h
+        lib/zfsgangster/include/os/freebsd/spl/sys/proc.h
+        lib/zfsgangster/include/os/freebsd/spl/sys/kstat.h
+        lib/zfsgangster/include/os/freebsd/spl/sys/cred.h
+        lib/zfsgangster/include/os/freebsd/spl/sys/byteorder.h
         lib/zfsgangster/include/os/freebsd/spl/sys/mutex.h
         lib/zfsgangster/include/os/freebsd/spl/sys/rwlock.h
         lib/zfsgangster/include/os/linux/spl/sys/time.h
@@ -22,12 +30,14 @@ add_executable(zfsGangster
         lib/zfsgangster/include/sys/avl_impl.h
         lib/zfsgangster/include/sys/dmu.h
         lib/zfsgangster/include/sys/nvpair.h
+        lib/zfsgangster/include/sys/note.h
         lib/zfsgangster/include/sys/range_tree.h
         lib/zfsgangster/include/sys/spa.h
         lib/zfsgangster/include/sys/spa_checksum.h
         lib/zfsgangster/include/sys/space_map.h
         lib/zfsgangster/include/sys/bitops.h
         lib/zfsgangster/include/sys/kstat.h
+        lib/zfsgangster/include/sys/mod.h
         lib/zfsgangster/include/sys/txg.h
         lib/zfsgangster/include/sys/vdev.h
         lib/zfsgangster/include/sys/vdev_indirect_births.h
@@ -37,6 +47,7 @@ add_executable(zfsGangster
         lib/zfsgangster/include/sys/zfs_context.h
         lib/zfsgangster/include/sys/zfs_ratelimit.h
         lib/zfsgangster/include/sys/zio_priority.h
+        lib/zfsgangster/include/sys/zfs_debug.h
         lib/zfsgangster/include/uberblock.h
         lib/zfsgangster/include/vdev.h
         lib/zfsgangster/include/zio.h

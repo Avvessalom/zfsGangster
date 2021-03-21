@@ -23,6 +23,33 @@
  * Copyright (c) 2011, 2020 by Delphix. All rights reserved.
  * Copyright (c) 2017, Intel Corporation.
  */
+/*
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the
+ * Common Development and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
+ *
+ * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ * or http://www.opensolaris.org/os/licensing.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each
+ * file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ * If applicable, add the following below this CDDL HEADER, with the
+ * fields enclosed by brackets "[]" replaced with your own identifying
+ * information: Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
+ */
+
+/*
+ * Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020 by Delphix. All rights reserved.
+ * Copyright (c) 2017, Intel Corporation.
+ * Copyright (c) 2019, Datto Inc. All rights reserved.
+ */
 
 //
 // Created by kain on 12.03.2021.
@@ -32,20 +59,29 @@
 #define ZFSGANGSTER_VDEV_H
 
 #include <inttypes.h>
-#include "include/sys/spa.h"
-#include "include/sys/nvpair.h"
-#include "include/sys/range_tree.h"
-#include "include/sys/avl.h"
-#include "include/os/freebsd/spl/sys/mutex.h"
-#include "include/os/linux/spl/sys/time.h"
-#include "include/sys/zio_priority.h"
-#include "include/sys/zfs.h"
-#include "include/os/linux/spl/sys/types.h"
-#include "include/sys/txg.h"
-#include "include/os/freebsd/spl/sys/list.h"
-#include "include/sys/space_map.h"
-#include "include/os/freebsd/spl/sys/condvar.h"
-#include "include/sys/vdev_rebuild.h"
+
+#include "sys/spa.h"
+#include "sys/nvpair.h"
+#include "sys/range_tree.h"
+#include "sys/avl.h"
+#include "os/freebsd/spl/sys/mutex.h"
+#include "os/linux/spl/sys/time.h"
+#include "sys/zio_priority.h"
+#include "sys/fs/zfs.h"
+#include "os/linux/spl/sys/types.h"
+#include "sys/txg.h"
+#include "os/freebsd/spl/sys/list.h"
+#include "sys/space_map.h"
+#include "os/freebsd/spl/sys/condvar.h"
+#include "sys/vdev_rebuild.h"
+#include "os/freebsd/spl/sys/rwlock.h"
+#include "sys/vdev_indirect_mapping.h"
+#include "sys/vdev_indirect_births.h"
+#include "sys/vdev.h"
+#include "sys/zfs_ratelimit.h"
+#include "lib/libspl/include/assert.h"
+#include "sys/dmu.h"
+#include "sys/zfs_context.h"
 #include "zio.h"
 
 #define VDEV_SKIP_SIZE        (8 << 10)
@@ -532,7 +568,7 @@ typedef struct vdev_boot_envblock {
     zio_eck_t	vbe_zbt;
 } vdev_boot_envblock_t;
 
-CTASSERT_GLOBAL(sizeof (vdev_boot_envblock_t) == VDEV_PAD_SIZE);
+CTASSERT_GLOBAL(sizeof(vdev_boot_envblock_t) == VDEV_PAD_SIZE);
 
 typedef struct vdev_label {
     char		vl_pad1[VDEV_PAD_SIZE];			/*  8K */
