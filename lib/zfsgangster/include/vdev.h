@@ -8,6 +8,7 @@
 #include <inttypes.h>
 
 #include "zio.h"
+#include "nvpair.h"
 
 #define VDEV_SKIP_SIZE        (8 << 10)
 #define VDEV_UBERBLOCK_RING   (128 << 10)
@@ -21,7 +22,7 @@ typedef struct vdev_boot_envblock {
     zio_eck_t vbe_zbt;
 } vdev_boot_envblock_t;
 
-typedef struct vdev_phys {
+gtypedef struct vdev_phys {
     char vp_nvlist[VDEV_PHYS_SIZE - sizeof(zio_eck_t)];
     zio_eck_t vp_zbt;
 } vdev_phys_t;
