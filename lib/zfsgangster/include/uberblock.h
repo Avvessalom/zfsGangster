@@ -7,6 +7,13 @@
 
 #define	SPA_DVAS_PER_BP	3		/* Number of DVAs in a bp	*/
 
+#include <inttypes.h>
+#include "zio.h"
+
+#define	UBERBLOCK_MAGIC		0x00bab10c		/* oo-ba-bloc!	*/
+typedef struct uberblock uberblock_t;
+
+int uberblock_verify(uberblock_t *ub);
 
 typedef struct dva {
     uint64_t	dva_word[2];
