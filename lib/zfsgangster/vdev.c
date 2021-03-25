@@ -12,7 +12,7 @@ void printncImpl(char* s, int cnt) {
 #define printnc(s) printncImpl(s, sizeof(s))
 
 void parse_vdev_label(struct vdev_label label){
-    printnc(label.vl_vdev_phys.vp_nvlist);
+//    printnc(label.vl_vdev_phys.vp_nvlist);
     puts(" \n");
     printnc(label.vl_uberblock);
 }

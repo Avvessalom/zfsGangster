@@ -6,7 +6,7 @@
 #include "include/vdev.h"
 #include "vdev.c"
 #include "include/uberblock.h"
-#include "ubervlock.c"
+#include "include/zio.h"
 
 int zfsGangster_open(const char *path) {
     struct vdev_label vdevLabel0;
@@ -32,8 +32,10 @@ int zfsGangster_open(const char *path) {
 
     parse_vdev_label(vdevLabel0);
     parse_vdev_label(vdevLabel1);
-    get_uberblocks(vdevLabel0);
+//    get_uberblocks(vdevLabel0);
     fclose(file);
+    uberblock_verify((uberblock_t *) vdevLabel0.vl_uberblock);
+    zio_eck_verify((struct zio_eck *) &vdevLabel0.vl_be.vbe_zbt.zec_magic);
     return 0;
 }
 
