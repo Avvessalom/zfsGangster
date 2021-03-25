@@ -116,6 +116,11 @@ typedef enum {
     DATA_TYPE_UINT8_ARRAY
 #endif
 } data_type_t;
+#include <inttypes.h>
+
+#define	NVP_NAME(nvp)		((char *)(nvp) + sizeof (nvpair_t))
+#define	NVP_TYPE(nvp)		((nvp)->nvp_type)
+#define	NVL_VERSION(nvl)	((nvl)->nvl_version)
 
 /* NV allocator framework */
 typedef struct nv_alloc_ops nv_alloc_ops_t;
@@ -125,13 +130,13 @@ typedef struct nv_alloc {
     void *nva_arg;
 } nv_alloc_t;
 
-struct nv_alloc_ops {
-    int (*nv_ao_init)(nv_alloc_t *, va_list);
-    void (*nv_ao_fini)(nv_alloc_t *);
-    void *(*nv_ao_alloc)(nv_alloc_t *, size_t);
-    void (*nv_ao_free)(nv_alloc_t *, void *, size_t);
-    void (*nv_ao_reset)(nv_alloc_t *);
-};
+//struct nv_alloc_ops {
+//    int (*nv_ao_init)(nv_alloc_t *, va_list);
+//    void (*nv_ao_fini)(nv_alloc_t *);
+//    void *(*nv_ao_alloc)(nv_alloc_t *, size_t);
+//    void (*nv_ao_free)(nv_alloc_t *, void *, size_t);
+//    void (*nv_ao_reset)(nv_alloc_t *);
+//};
 
 
 typedef struct {
@@ -188,5 +193,18 @@ struct i_nvp {
     /* nvpair */
     nvpair_t nvi_nvp;
 };
+
+
+
+typedef struct blyat {
+    uint64_t bl_version;
+    char     bl_name[1];
+    uint64_t bl_state;
+    uint64_t bl_transaction;
+    uint64_t bl_pool_guid;
+    uint64_t bl_top_guid;
+    uint64_t bl_guid;
+    nvlist_t bl_list;
+} blyat_t;
 
 #endif //ZFSGANGSTER_NVPAIR_H
