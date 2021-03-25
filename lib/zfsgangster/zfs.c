@@ -41,6 +41,6 @@ int zfsGangster_open(const char *path) {
 
 int main() {
 
-    zfsGangster_open("/home/kain/github/zfsGangster/scripts/fs.img");
+    zfsGangster_open("/Users/sdfedorov/Documents/ITMO/6_semester/System_Software_ITMO_2021/zfsGangster/scripts/fs.img");
     return 0;
 }

@@ -3,9 +3,9 @@ project(zfsGangster C)
 
 set(CMAKE_C_STANDARD 11)
 
-include_directories(/lib/zfsgangster/include)
-include_directories(/lib/zfsgangster/utills)
-include_directories(/lib/zfsgangster)
+include_directories(lib/zfsgangster/include)
+include_directories(lib/zfsgangster/utills)
+include_directories(lib/zfsgangster)
 
 
 add_executable(zfsGangster

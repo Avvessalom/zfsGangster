@@ -2,6 +2,7 @@
 // Created by kain on 10.03.2021.
 //
 #include <byteswap.h>
+#include <vdev.h>
 #include "structConverter.h"
 #include "../include/uberblock.h"
 
